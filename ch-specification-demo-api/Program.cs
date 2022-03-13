@@ -9,7 +9,7 @@ using MediatR;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<MongoDbSettings>(options 
-    => builder.Configuration.GetSection(Constants.Settings.BeerStoreDatabase));
+    => builder.Configuration.GetSection(Constants.Settings.BeerStoreDatabase).Bind(options));
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddMediatR(typeof(Program).Assembly);

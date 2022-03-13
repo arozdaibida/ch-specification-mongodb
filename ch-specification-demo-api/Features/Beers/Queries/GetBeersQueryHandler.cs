@@ -1,8 +1,9 @@
-﻿using ch_specification_demo_api.Infrastructure.Repository;
+﻿using ch_specification_demo_api.Features.Beers.Specifications;
+using ch_specification_demo_api.Infrastructure.Repository;
 using ch_specification_demo_api.Models;
 using MediatR;
 
-namespace ch_specification_demo_api.Features.GetBeers.Queries
+namespace ch_specification_demo_api.Features.Beers.Queries
 {
     public class GetBeersQueryHandler : IRequestHandler<GetBeersQuery, IEnumerable<Beer>>
     {
@@ -16,7 +17,7 @@ namespace ch_specification_demo_api.Features.GetBeers.Queries
 
         public async Task<IEnumerable<Beer>> Handle(GetBeersQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.Get(x => x.Name.Contains(request.SearchFilter));
+            return await _repository.Get(new SearchBeersSpecification(request.Request));
         }
     }
 }

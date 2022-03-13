@@ -16,5 +16,12 @@
         {
             public const string Beers = "beers";
         }
+
+        public static class OrderType
+        {
+            public const string Asc = "Asc";
+
+            public const string Desc = "desc";
+        }
     }
 }

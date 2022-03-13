@@ -1,10 +1,11 @@
-﻿using ch_specification_demo_api.Features.GetBeers.Queries;
+﻿using ch_specification_demo_api.Features.Beers.Models;
+using ch_specification_demo_api.Features.Beers.Queries;
 using FastEndpoints;
 using MediatR;
 
-namespace ch_specification_demo_api.Features.GetBeers.Endpoints
+namespace ch_specification_demo_api.Features.Beers.Endpoints
 {
-    public class GetBeerEndpoint : Endpoint<GetBeerRequest>
+    public class GetBeerEndpoint : Endpoint<GetBeersRequest>
     {
         private readonly ISender _mediator;
 
@@ -21,12 +22,14 @@ namespace ch_specification_demo_api.Features.GetBeers.Endpoints
             AllowAnonymous();
         }
 
-        public override async Task HandleAsync(GetBeerRequest req, CancellationToken ct)
+        public override async Task HandleAsync(GetBeersRequest req, CancellationToken ct)
         {
-            await _mediator.Send(new GetBeersQuery
+            var beers = await _mediator.Send(new GetBeersQuery
             {
-                SearchFilter = req.SearchFilter
+                Request = req
             });
+
+            await SendAsync(beers);
         }
     }
 }

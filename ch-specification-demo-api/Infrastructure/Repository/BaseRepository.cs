@@ -1,9 +1,7 @@
 ﻿using ch_specification_demo_api.Infrastructure.Factories;
+using ch_specification_demo_api.Infrastructure.Specification;
 using ch_specification_demo_api.Models;
-using ch_specification_demo_api.Settings;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Linq.Expressions;
 
 namespace ch_specification_demo_api.Infrastructure.Repository
 {
@@ -18,10 +16,14 @@ namespace ch_specification_demo_api.Infrastructure.Repository
             _collection = mongoDatabase.GetCollection<T>(Constants.MongoCollections.Beers);
         }
 
-        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> Get(ISpecification<T> filter)
         {
-            return await _collection.Find(filter).ToListAsync();
-            
+            return await ApplyFilter(filter).ToListAsync();
+        }
+
+        private IFindFluent<T,T> ApplyFilter(ISpecification<T> specification)
+        {
+            return SpecificationEvaluator<T>.Process(_collection, specification);
         }
     }
 }
